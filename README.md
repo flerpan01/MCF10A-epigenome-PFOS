@@ -9,9 +9,9 @@ The code in the repository was used to for computational analysis for the projec
 + As PFOS has potentially [endocrine disrupting estrogen activity](https://doi.org/10.1111/j.1365-2605.2008.00870.x) and has been [linked to breast cancer](https://doi.org/10.1186/1476-069X-10-88), the hypothesis is to identify DM regions which overlap genes related to the phenotypes listed above.
 + DNA methylation levels were mapped with Enzymatic Methyl sequencing (EM-seq)
 
-**Aim** to elucidate methylation alteration induced by PFOS exposure, aka "methylome fingerprint"
+>**The Aim** was to elucidate methylation alteration induced by PFOS exposure, aka "methylome fingerprint"
 
-## Workflow
+## Analysis workflow
 
 ### File structure
 
@@ -116,3 +116,20 @@ GRCh38/
 ```
 
 ### Differental methylation analysis
+
+Differentially methylated regions (DMRs) were divided into 2 resolutions, (1) CpG and (2) tile of 100 bp. CpG-sites with low coverage (< 10 reads) and the top 99th percentile (PCR duplicates) were removed. Normalisation was done with scaling factor between samples based on differences between median of coverage distribution. The tiles were only considored if 2 or more CpG-sites where present. Finally, on a group level (control and exposed) CpG-sites were considored if 66% of the samples (4 out of 6) had coverage. Standard deviation (SD) filtering was applied where CpG-site with < 2 SD (little to no variation) were removed as they would not contribute information for downstream analysis.
+
+```sh
+# Ran at HPC (UPPMAX)
+sbatch code/diffmeth.sh
+
+## will start code/diffmeth.R with different arguments for CpG resolution
+```
+
+The `dump/` folder should contain the following:
+
+```
+dump/
+├── diffmeth_1_cpg.csv.gz
+└── diffmeth_1_tile100.csv.gz
+```
