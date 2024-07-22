@@ -103,11 +103,19 @@ output filename = "refseq_UCSC_GRCh38.bed"
 >This table is included for reproducablility as it holds a screenshot of the queried TCGA database. Generating a new might generate other results. However, feel free to do so to get update results!
 
 ```
-# go to: https://portal.gdc.cancer.gov, navigate to "Projects" tab. In the left panel, choose breast as "Primary Site" and methylation array as "Experimental Strategy". This will filter out 3 projects of which "TCGA-BRCA" is the best match as it contains only the breast tissue and 1,100 cases
+# go to: https://portal.gdc.cancer.gov, navigate to "Projects" tab. 
+# In the left panel, choose breast as "Primary Site" and methylation 
+# array as "Experimental Strategy". This will filter out 3 projects of
+# which "TCGA-BRCA" is the best match as it contains only the breast 
+# tissue and 1,100 cases
 
-# To access the mutated gene names navigate to "Exporation" tab. In the left panel, choose  "TCGA-BRCA" as "Projects". Click on the TSV button (on the right hand side) to download the top genes. 
+# To access the mutated gene names navigate to "Exporation" tab. 
+# In the left panel, choose  "TCGA-BRCA" as "Projects". 
+# Click on the TSV button (on the right hand side) to download the top genes. 
 
-# NOTE, for rendering limitations the homepage will only show up to 100 genes. To increase this number use the URL below and change "genesTable_size=" to a number > 100. Below, I use 2000:
+# NOTE, for rendering limitations the homepage will only show up to 100 genes.
+# To increase this number use the URL below and change "genesTable_size=" to 
+# a number > 100. Below, I use 2000:
 
 #https://portal.gdc.cancer.gov/exploration?facetTab=genes&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.primary_site%22%2C%22value%22%3A%5B%22breast%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.project.project_id%22%2C%22value%22%3A%5B%22TCGA-BRCA%22%5D%7D%7D%5D%7D&genesTable_size=2000&searchTableTab=genes
 ```
