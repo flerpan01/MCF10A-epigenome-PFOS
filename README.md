@@ -11,7 +11,7 @@ The code in the repository was used to for computational analysis for the projec
 
 # Analysis workflow
 
-## File structure
+Project file structure
 
 ```
 project/
@@ -140,11 +140,15 @@ data/
 
 ```sh
 Rscript code/methtable.R
+Rscript code/genetable.R
+Rscript code/go_analysis.R
 ```
 
 The `data/` folder should contain the following:
 
 ```
 data/
-└── PFOS_MCF-10A_DMR.Rds
+├── PFOS_MCF-10A_DMG.Rds
+├── PFOS_MCF-10A_DMR.Rds
+└── PFOS_MCF-10A_GO.Rds
 ```
