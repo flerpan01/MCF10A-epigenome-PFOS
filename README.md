@@ -1,8 +1,6 @@
-# README
-
 The code in the repository was used to for computational analysis for the project: [Perfluorooctanesulfonic acid (PFOS) induced cancer related methylome alterations in human breast cells](doi)
 
-## Project summary
+# Project summary
 
 + Dataset is composed of Perflourooctanesulfonic acid (PFOS) exposed (72h) normal human breast cell line (MCF-10A). 12 samples, 6 control, 6 exposed.
 + The sequencing data is built upon the study: [PFOS induces proliferation, cell-cycle progression, and malignant phenotype in human breast epithelial cells](https://doi.org/10.1007/s00204-017-2077-8). From this study only the control and 1µM cells cultures were used.
@@ -11,9 +9,9 @@ The code in the repository was used to for computational analysis for the projec
 
 >**The Aim** was to elucidate methylation alteration induced by PFOS exposure, aka "methylome fingerprint"
 
-## Analysis workflow
+# Analysis workflow
 
-### File structure
+## File structure
 
 ```
 project/
@@ -25,7 +23,7 @@ project/
 └── README.md
 ```
 
-### Mapping & coverage
+## Mapping & coverage
 
 Run [nf-core methylseq pipeline](https://nf-co.re/methylseq) to align the sequencing reads to the reference genome and generate the methylation coverage files.
 
@@ -63,7 +61,7 @@ nextflow run nf-core/methylseq -r $VERSION \
   -resume
 ```
 
-### Complementary files
+## Complementary files
 
 To elucidate the relevance of identified DMRs information about overlapping genomic features is needed (such as promoters, exon, intron, CpG-island). The database hosted at [University of California Santa Cruz (UCSC) Genomics Institute](https://genome-euro.ucsc.edu/index.html) holds genomic features for various species. Annotations can be exported from the [Table Browser tool](https://genome-euro.ucsc.edu/cgi-bin/hgTables). To download the annotations set the parameters as follow:
 
@@ -111,13 +109,13 @@ The `GRCh38/` folder should contain the following:
 GRCh38/
 ├── cg_pos_CRGh38.csv.gz
 ├── cpgislands_GRCh38.bed
-├── ensembl_dataset_GRCm39.csv.gz
+├── ensembl_dataset_GRCh38.csv.gz
 └── refseq_UCSC_GRCh38.bed
 ```
 
-### Differental methylation analysis
+## Differental methylation analysis
 
-Differentially methylated regions (DMRs) were divided into 2 resolutions, (1) CpG and (2) tile of 100 bp. CpG-sites with low coverage (< 10 reads) and the top 99th percentile (PCR duplicates) were removed. Normalisation was done with scaling factor between samples based on differences between median of coverage distribution. The tiles were only considored if 2 or more CpG-sites where present. Finally, on a group level (control and exposed) CpG-sites were considored if 66% of the samples (4 out of 6) had coverage. Standard deviation (SD) filtering was applied where CpG-site with < 2 SD (little to no variation) were removed as they would not contribute information for downstream analysis.
+1. Differentially methylated regions (DMRs) were divided into 2 resolutions, (1) CpG and (2) tile of 100 bp. CpG-sites with low coverage (< 10 reads) and the top 99th percentile (PCR duplicates) were removed. Normalisation was done with scaling factor between samples based on differences between median of coverage distribution. The tiles were only considored if 2 or more CpG-sites where present. Finally, on a group level (control and exposed) CpG-sites were considored if 66% of the samples (4 out of 6) had coverage. Standard deviation (SD) filtering was applied where CpG-site with < 2 SD (little to no variation) were removed as they would not contribute information for downstream analysis.
 
 ```sh
 # Ran at HPC (UPPMAX)
@@ -126,10 +124,27 @@ sbatch code/diffmeth.sh
 ## will start code/diffmeth.R with different arguments for CpG resolution
 ```
 
-The `dump/` folder should contain the following:
+The `dump/` and `data/` folder should contain the following:
 
 ```
 dump/
 ├── diffmeth_1_cpg.csv.gz
 └── diffmeth_1_tile100.csv.gz
+
+data/
+├── PFOS_MCF-10A_betavalues_matrix_cpg.Rds
+└── PFOS_MCF-10A_betavalues_matrix_tile100.Rds
+```
+
+2. Generate 3 tables: DMR and DMG, (1) DMR = each row is a dmr_id, (2) DMG = each row is gene with info about DMRs within it, genomic regions, dmr_id, hyper/hypo etc, (3) CGI = each row CpG-island. Significance threshold for DMRs were set to qvalue < 0.05 and meth.diff > ±15 and ±5, CpG-sites and 100 bp tiles, respectively. 
+
+```sh
+Rscript code/methtable.R
+```
+
+The `data/` folder should contain the following:
+
+```
+data/
+└── PFOS_MCF-10A_DMR.Rds
 ```
