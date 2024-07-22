@@ -132,7 +132,7 @@ if (!dir.exists("GRCh38")) dir.create("GRCh38")
 ens <- get_ensembl(chromosomes, organism_dataset)
 
 #filename <- file.path(projdir, "data/ensembl_dataset_GRCm39.csv.gz")
-filename <- file.path("GRCh38/ensembl_dataset_GRCm39.csv.gz")
+filename <- file.path("GRCh38/ensembl_dataset_GRCh38.csv.gz")
 fwrite(ens, file = filename)
 
 # 2. Calculate all CpG positions on the reference genome
