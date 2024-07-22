@@ -162,7 +162,7 @@ data/
 └── PFOS_MCF-10A_betavalues_matrix_tile100.Rds
 ```
 
-2. Generate 3 tables: DMR and DMG, (1) DMR = each row is a dmr_id, (2) DMG = each row is gene with info about DMRs within it, genomic regions, dmr_id, hyper/hypo etc. Significance threshold for DMRs were set to qvalue < 0.05 and meth.diff > ±15 and ±5, CpG-sites and 100 bp tiles, respectively. (3) GO analysis based on genomic regions of significant DMRs: promoter, exon, intron, CGI. The genes used as universe were all genes found in the ensembl database.
+2. Generate 3 tables: DMR and DMG, (1) DMR = each row is a dmr_id, (2) DMG = each row is gene with info about DMRs within it, genomic regions, dmr_id, hyper/hypo etc. Significance threshold for DMRs were set to qvalue < 0.05 and meth.diff > ±15 and ±5, CpG-sites and 100 bp tiles, respectively. (3) CGI = each row CpG-island. (4) GO analysis based on genomic regions of significant DMRs: promoter, exon, intron, CGI. The genes used as universe were all genes found in the ensembl database.
 
 ```sh
 Rscript code/methtable.R
@@ -179,3 +179,4 @@ data/
 └── PFOS_MCF-10A_GO.Rds
 ```
 
+>This project was made by the [Karlsson Laboratory Group](https://karlssonlab.se/) at Stockholm University, Sweden.
