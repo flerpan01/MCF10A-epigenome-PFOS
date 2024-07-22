@@ -15,11 +15,12 @@ Project file structure
 
 ```
 project/
-├── code
-├── data
-├── dump
-├── merged
-├── results
+├── code/
+├── data/
+├── dump/
+├── GRCh38/
+├── merged/
+├── results/
 └── README.md
 ```
 
@@ -63,9 +64,9 @@ nextflow run nf-core/methylseq -r $VERSION \
 
 ## Complementary files
 
-To elucidate the relevance of identified DMRs information about overlapping genomic features is needed (such as promoters, exon, intron, CpG-island). The database hosted at [University of California Santa Cruz (UCSC) Genomics Institute](https://genome-euro.ucsc.edu/index.html) holds genomic features for various species. Annotations can be exported from the [Table Browser tool](https://genome-euro.ucsc.edu/cgi-bin/hgTables). To download the annotations set the parameters as follow:
+To elucidate the relevance of identified differentially methylated regions (DMRs) information about overlapping genomic features is needed (such as promoters, exon, intron, CpG-island). The database hosted at [University of California Santa Cruz (UCSC) Genomics Institute](https://genome-euro.ucsc.edu/index.html) holds genomic features for various species. Annotations can be exported from the [Table Browser tool](https://genome-euro.ucsc.edu/cgi-bin/hgTables). To download the annotations set the parameters as follow:
 
-+ CpG-islands annotations, save as `cpgislands_GRCh38.bed`
+1. CpG-islands annotations, save as `cpgislands_GRCh38.bed`
 
 ```
 clade = "Mammals" 
@@ -81,7 +82,7 @@ output filename = "cpgislands_GRCh38.bed"
 <click> "get BED"
 ```
 
-+ [Refseq](https://en.wikipedia.org/wiki/RefSeq) annotations, save as `refseq_UCSC_GRCh38.bed`
+2. [Refseq](https://en.wikipedia.org/wiki/RefSeq) annotations, save as `refseq_UCSC_GRCh38.bed`
 
 ```
 clade = "Mammals" 
@@ -97,15 +98,32 @@ output filename = "refseq_UCSC_GRCh38.bed"
 <click> "get BED"
 ```
 
+3. [TCGA database](https://portal.gdc.cancer.gov) holds information about genes affected by differences in methylation related to cancer. Save as `frequently-mutated-genes.2023-12-13.tsv`
+
+>This table is included for reproducablility as it holds a screenshot of the queried TCGA database. Generating a new might generate other results. However, feel free to do so to get update results!
+
+```
+# go to: https://portal.gdc.cancer.gov, navigate to "Projects" tab. In the left panel, choose breast as "Primary Site" and methylation array as "Experimental Strategy". This will filter out 3 projects of which "TCGA-BRCA" is the best match as it contains only the breast tissue and 1,100 cases
+
+# To access the mutated gene names navigate to "Exporation" tab. In the left panel, choose  "TCGA-BRCA" as "Projects". Click on the TSV button (on the right hand side) to download the top genes. 
+
+# NOTE, for rendering limitations the homepage will only show up to 100 genes. To increase this number use the URL below and change "genesTable_size=" to a number > 100. Below, I use 2000:
+
+#https://portal.gdc.cancer.gov/exploration?facetTab=genes&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.primary_site%22%2C%22value%22%3A%5B%22breast%22%5D%7D%7D%2C%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.project.project_id%22%2C%22value%22%3A%5B%22TCGA-BRCA%22%5D%7D%7D%5D%7D&genesTable_size=2000&searchTableTab=genes
+```
+
 + ensembl database and reference genome CpG-site positions, run `code/complementary_files.R`, will generate `ensembl_dataset_GRCm39.csv.gz` and `cg_pos_CRGh38.csv.gz`
 
 ```sh
 Rscript code/complementary_files.R
 ```
 
-The `GRCh38/` folder should contain the following: 
+The `data/` and `GRCh38/` folder should contain the following: 
 
 ```
+data/
+└── frequently-mutated-genes.2023-12-13.tsv
+
 GRCh38/
 ├── cg_pos_CRGh38.csv.gz
 ├── cpgislands_GRCh38.bed
@@ -115,7 +133,7 @@ GRCh38/
 
 ## Differental methylation analysis
 
-1. Differentially methylated regions (DMRs) were divided into 2 resolutions, (1) CpG and (2) tile of 100 bp. CpG-sites with low coverage (< 10 reads) and the top 99th percentile (PCR duplicates) were removed. Normalisation was done with scaling factor between samples based on differences between median of coverage distribution. The tiles were only considored if 2 or more CpG-sites where present. Finally, on a group level (control and exposed) CpG-sites were considored if 66% of the samples (4 out of 6) had coverage. Standard deviation (SD) filtering was applied where CpG-site with < 2 SD (little to no variation) were removed as they would not contribute information for downstream analysis.
+1. DMRs were divided into 2 resolutions, (1) CpG and (2) tile of 100 bp. CpG-sites with low coverage (< 10 reads) and the top 99th percentile (PCR duplicates) were removed. Normalisation was done with scaling factor between samples based on differences between median of coverage distribution. The tiles were only considored if 2 or more CpG-sites where present. Finally, on a group level (control and exposed) CpG-sites were considored if 66% of the samples (4 out of 6) had coverage. Standard deviation (SD) filtering was applied where CpG-site with < 2 SD (little to no variation) were removed as they would not contribute information for downstream analysis.
 
 ```sh
 # Ran at HPC (UPPMAX)
@@ -136,7 +154,7 @@ data/
 └── PFOS_MCF-10A_betavalues_matrix_tile100.Rds
 ```
 
-2. Generate 3 tables: DMR and DMG, (1) DMR = each row is a dmr_id, (2) DMG = each row is gene with info about DMRs within it, genomic regions, dmr_id, hyper/hypo etc, (3) CGI = each row CpG-island. Significance threshold for DMRs were set to qvalue < 0.05 and meth.diff > ±15 and ±5, CpG-sites and 100 bp tiles, respectively. 
+2. Generate 3 tables: DMR and DMG, (1) DMR = each row is a dmr_id, (2) DMG = each row is gene with info about DMRs within it, genomic regions, dmr_id, hyper/hypo etc. Significance threshold for DMRs were set to qvalue < 0.05 and meth.diff > ±15 and ±5, CpG-sites and 100 bp tiles, respectively. (3) GO analysis based on genomic regions of significant DMRs: promoter, exon, intron, CGI. The genes used as universe were all genes found in the ensembl database.
 
 ```sh
 Rscript code/methtable.R
@@ -152,3 +170,4 @@ data/
 ├── PFOS_MCF-10A_DMR.Rds
 └── PFOS_MCF-10A_GO.Rds
 ```
+
