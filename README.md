@@ -1,5 +1,3 @@
-The code in the repository was used to for computational analysis for the project: [Perfluorooctanesulfonic acid (PFOS) induced cancer related methylome alterations in human breast cells](doi)
-
 # Project summary
 
 + Dataset is composed of Perflourooctanesulfonic acid (PFOS) exposed (72h) normal human breast cell line (MCF-10A). 12 samples, 6 control, 6 exposed.
@@ -7,7 +5,7 @@ The code in the repository was used to for computational analysis for the projec
 + As PFOS has potentially [endocrine disrupting estrogen activity](https://doi.org/10.1111/j.1365-2605.2008.00870.x) and has been [linked to breast cancer](https://doi.org/10.1186/1476-069X-10-88), the hypothesis is to identify DM regions which overlap genes related to the phenotypes listed above.
 + DNA methylation levels were mapped with Enzymatic Methyl sequencing (EM-seq)
 
->**The Aim** was to elucidate methylation alteration induced by PFOS exposure, aka "methylome fingerprint"
+>The code in the repository was used to for computational analysis for the project: [Perfluorooctanesulfonic acid (PFOS) induced cancer related DNA methylation alterations in human breast cells: A whole genome methylome study](https://doi.org/10.1016/j.scitotenv.2024.174864)
 
 # Analysis workflow
 
@@ -178,5 +176,7 @@ data/
 ├── PFOS_MCF-10A_DMR.Rds
 └── PFOS_MCF-10A_GO.Rds
 ```
+
+---
 
 >This project was made by the [Karlsson Laboratory Group](https://karlssonlab.se/) at Stockholm University, Sweden.
