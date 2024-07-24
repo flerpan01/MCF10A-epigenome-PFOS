@@ -5,7 +5,7 @@
 + As PFOS has potentially [endocrine disrupting estrogen activity](https://doi.org/10.1111/j.1365-2605.2008.00870.x) and has been [linked to breast cancer](https://doi.org/10.1186/1476-069X-10-88), the hypothesis is to identify DM regions which overlap genes related to the phenotypes listed above.
 + DNA methylation levels were mapped with Enzymatic Methyl sequencing (EM-seq)
 
->The code in the repository was used to for computational analysis for the project: [Perfluorooctanesulfonic acid (PFOS) induced cancer related DNA methylation alterations in human breast cells: A whole genome methylome study](https://doi.org/10.1016/j.scitotenv.2024.174864)
+>The code in the repository was used for computational analysis for the paper: [Perfluorooctanesulfonic acid (PFOS) induced cancer related DNA methylation alterations in human breast cells: A whole genome methylome study](https://doi.org/10.1016/j.scitotenv.2024.174864)
 
 # Analysis workflow
 
@@ -15,16 +15,18 @@ Project file structure
 project/
 ├── code/
 ├── data/
-├── dump/
-├── GRCh38/
-├── merged/
-├── results/
+├── dump/     # intermediate files
+├── GRCh38/   # complementary files
+├── results/  # produced by nextflow
+├── seqdata/  # sequencing data
 └── README.md
 ```
 
 ## Mapping & coverage
 
 Run [nf-core methylseq pipeline](https://nf-co.re/methylseq) to align the sequencing reads to the reference genome and generate the methylation coverage files.
+
+>Sequencing data will be made available upon request
 
 ```sh
 # Ran on HPC (UPPMAX). Use login node or pipeline is killed when node is killed
@@ -53,7 +55,7 @@ nextflow run nf-core/methylseq -r $VERSION \
   --project $PROJECT \
   --genome GRCh38 \
   --em_seq \
-  --input 'merged/*_R{1,2}.fastq.gz' \
+  --input 'seqdata/*_R{1,2}.fastq.gz' \
   --outdir 'results' \
   --aligner bismark \
   --email $EMAIL \
